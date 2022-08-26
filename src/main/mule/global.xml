@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<api-gateway:autodiscovery apiId="123" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="1bc6eb49-3914-4494-9eca-75ef56fd2a22" flowRef="hrdataapi-main" />
+	<ee:object-store-caching-strategy name="Offices" doc:name="Caching Strategy" doc:id="49e188db-9eef-4268-9252-17eb8b9d42e9" keyGenerationExpression="#[1]" >
+		<os:private-object-store entryTtl="365" entryTtlUnit="DAYS" expirationInterval="365" expirationIntervalUnit="DAYS" />
+	</ee:object-store-caching-strategy>
+	<http:request-config name="PositionStack" doc:name="HTTP Request configuration" doc:id="8106c4db-f4d5-4e31-938e-9832cb4e39bf" />
+	<global-property doc:name="Global Property" doc:id="0d69cd0b-3624-48de-ab3e-41daa09cba74" name="mule.env" value="${mule.env}" />
+	<configuration-properties doc:name="Configuration properties" doc:id="6f71df88-7295-4668-ba7f-d697edce758f" file="${mule.env}-config.yaml" />
+</mule>

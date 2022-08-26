@@ -1,0 +1,28 @@
+#%RAML 1.0 DataType
+type: object
+description: An office location
+properties:
+  Street:
+    type: string
+    required: false
+    example: "123 Testing Street"
+  City:
+    type: string
+    required: false
+    example: "Draper"
+  State:
+    type: string
+    required: false
+    example: "UT"
+  ZipCode:
+    type: string
+    required: false
+    example: "84020"
+  Latitude:
+    type: number
+    multipleOf: 0.00001
+    example: 34.07123
+  Longitude:
+    type: number
+    multipleOf: 0.00001
+    example: -118.23456

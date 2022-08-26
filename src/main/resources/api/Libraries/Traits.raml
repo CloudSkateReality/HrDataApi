@@ -1,0 +1,80 @@
+#%RAML 1.0 Library
+traits:
+  ClientCredentialsRequired: !include ..//exchange_modules/f6ed7e6b-a8a7-4399-beb6-4ef1356423e0/clientidenforcement/1.0.1/clientidenforcement.raml
+  
+  HasResponseCollection:
+    responses:
+      200:
+        body:
+          application/json:
+            type: <<TypeName>>[]
+
+  OfficeQueryParams:
+    queryParameters:
+      State:
+        type: string
+        example: "CA"
+        required: false
+        enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DE
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - DC
+          - GU
+          - MH
+          - MP
+          - PR
+          - VI
+          - AE
+          - AA
+          - AE
+          - AE
+          - AE
+          - AP

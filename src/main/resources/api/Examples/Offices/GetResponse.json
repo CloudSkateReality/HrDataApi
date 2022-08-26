@@ -1,0 +1,18 @@
+[
+	{
+		"Street": "123 Test St",
+		"City": "Testerville",
+		"State": "CA",
+		"ZipCode": "90012",
+    "Latitude": 34.07123,
+    "Longitude": -118.23456
+	},
+  {
+		"Street": "225 S Olive St",
+		"City": "Los Angeles",
+		"State": "CA",
+		"ZipCode": "90012",
+    "Latitude": 34.06599,
+    "Longitude": -118.23821
+	}
+]
