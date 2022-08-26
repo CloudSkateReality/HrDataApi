@@ -1,0 +1,17 @@
+#%RAML 1.0
+title: HrDataApi
+
+description: This API exists to provide approved clients with Hr data for internal systems.
+
+uses:
+  Traits: Libraries/Traits.raml
+  DataTypes: Libraries/DataTypes.raml
+  ResourceTypes: Libraries/ResourceTypes.raml
+
+/offices:
+  type: 
+    ResourceTypes.Collection: 
+      TypeName: DataTypes.Office
+      ExampleName: !include Examples/Offices/GetResponse.json
+  get:
+    is: [Traits.OfficeQueryParams]

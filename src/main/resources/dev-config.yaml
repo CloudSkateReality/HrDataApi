@@ -1,0 +1,8 @@
+System:
+  Host: "0.0.0.0"
+  Port: "8081"
+  PositionStack:
+    Host: "api.positionstack.com"
+    AccessKey: "62de93a55f2d881edc837282dfd11ac7"
+  AutoDiscovery:
+    Id: "18083408"

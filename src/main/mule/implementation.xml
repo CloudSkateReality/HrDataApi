@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="GetOffices" doc:id="972df2a9-f143-4d36-8a2c-4ab05aca38b0" >
+		<scheduler doc:name="Load Cache on Start-up" doc:id="77e7b88f-e3f9-4f2f-87ca-de1826712bca" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="365" timeUnit="DAYS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<ee:cache doc:name="Cache" doc:id="26c9e83b-2d63-47ec-8c74-dc1d9df2a793" cachingStrategy-ref="Offices">
+			<file:read doc:name="offices.csv" doc:id="bb949d98-1cbb-4b2e-a53f-de3b2bd5d43a" path="C:\git\WeatherHrData\src\main\resources\offices.csv" />
+			<ee:transform doc:name="Transform to JSON" doc:id="1518f27a-7545-4eef-9220-e3bcb0e080a0" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<parallel-foreach doc:name="Parallel For Each" doc:id="bdfaa92f-d21f-4fd4-9e57-eb0cfe1ba28c" >
+				<http:request method="GET" doc:name="Request" doc:id="7c0fdd9c-5c1a-4188-afca-29e9ddca0288" url="http://api.positionstack.com/v1/forward" target="Coordinates">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"access_key" : p('System.PositionStack.AccessKey'),
+	"query" : payload.Street ++ " " ++ payload.City ++ " " ++ payload.State ++ " " ++ payload.'Zip Code'
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="16f28b0c-22b7-47e8-a783-0e9b837557a2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var FirstResult = vars.Coordinates.data[0]
+---
+{
+    Street: payload.Street,
+	City: payload.City,
+	State: FirstResult.region_code,
+	ZipCode: payload.'Zip Code' as Number as String {format:"00000"},
+    Latitude: FirstResult.latitude,
+    Longitude: FirstResult.longitude,
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		</parallel-foreach>
+			<ee:transform doc:name="Transform Message" doc:id="12f015cb-0858-45cd-af11-df957e325c97" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+flatten(payload..payload) filter ($ != {}) distinctBy $ default []]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<logger level="INFO" doc:name="Log Cache Loaded" doc:id="cd72cc0a-c7e5-43f4-a6b0-2731499311cc" message="offices.csv loaded into cache" />
+		</ee:cache>
+		<ee:transform doc:name="Transform Message" doc:id="16419187-cfa8-4af1-857f-9daac1c3a6eb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload filter (value) -> value.State == vars.State]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

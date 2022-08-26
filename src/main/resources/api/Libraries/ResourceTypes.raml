@@ -1,0 +1,21 @@
+#%RAML 1.0 Library
+
+uses:
+  Traits: Traits.raml
+
+resourceTypes:
+  
+  Collection:
+    usage:
+      Use this resourceType to populate read-only resource collections with JWT & Client ID Authentication, simple Get functionality and built-in documentation
+    description:  A collection of <<resourcePathName>>
+    is: [Traits.ClientCredentialsRequired]
+    get:
+      description: Get all <<resourcePathName>>, filtered as desired
+      is: [Traits.HasResponseCollection: {TypeName: <<TypeName>>, ExampleName:<<ExampleName>>}]
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<TypeName>>[]
+              example: <<ExampleName>>
